@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-Powered Appointment Management Assistant | Salesforce CRM Capstone</title>
+<meta name="description" content="A Salesforce CRM capstone project: custom Appointment object, autolaunched Flows, Screen Flow booking interface, Lightning App, reports and dashboard.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>%F0%9F%93%85</text></svg>">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="brand">
+      <span class="brand-mark">AI</span>
+      <span class="brand-text">Appointment Management Assistant</span>
+    </div>
+    <nav class="site-nav">
+      <a href="#overview">Overview</a>
+      <a href="#data-model">Data Model</a>
+      <a href="#automation">Automation</a>
+      <a href="#booking">Booking</a>
+      <a href="#app">Lightning App</a>
+      <a href="#reports">Reports</a>
+      <a href="#gallery">Screenshots</a>
+      <a href="#docs">Docs</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero" id="overview">
+    <div class="container hero-inner">
+      <p class="eyebrow">Salesforce CRM Capstone Project</p>
+      <h1>AI-Powered Appointment Management Assistant</h1>
+      <p class="hero-lead">
+        An appointment management solution built on Salesforce that automates the
+        scheduling, rescheduling, and cancellation of customer appointments —
+        with reusable Flows, a working Screen Flow booking interface, a Lightning
+        App, and live reports &amp; dashboards.
+      </p>
+      <div class="hero-meta">
+        <span><strong>Author:</strong> Muath Al-Mutairi</span>
+        <span class="dot">&bull;</span>
+        <span><strong>Platform:</strong> Salesforce</span>
+        <span class="dot">&bull;</span>
+        <span><strong>Domain:</strong> CRM</span>
+      </div>
+      <div class="hero-actions">
+        <a href="#gallery" class="btn btn-primary">View Screenshots</a>
+        <a href="https://github.com/Muath477/salesforce-appointment-assistant" class="btn btn-ghost" target="_blank" rel="noopener">View on GitHub</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="data-model">
+    <div class="container">
+      <h2 class="section-title">Data Model</h2>
+      <p class="section-lead">
+        Custom object <strong>Appointment</strong> (Record Name = Auto Number <code>APT-{00000}</code>)
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Field</th><th>Type</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Appointment Number</td><td>Auto Number — <code>APT-{00000}</code> (Record Name)</td></tr>
+            <tr><td>Contact (Customer)</td><td>Lookup &rarr; Contact</td></tr>
+            <tr><td>Appointment Date/Time</td><td>Date/Time</td></tr>
+            <tr><td>Status</td><td>Picklist — Scheduled &middot; Rescheduled &middot; Completed &middot; Cancelled</td></tr>
+            <tr><td>Service Type</td><td>Picklist — Consultation &middot; Follow-up &middot; Support &middot; Other</td></tr>
+            <tr><td>Notes</td><td>Long Text Area</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <button class="shot-link" data-shot="0">See the field configuration &rarr;</button>
+    </div>
+  </section>
+
+  <section class="section alt" id="automation">
+    <div class="container">
+      <h2 class="section-title">Automation — Autolaunched Flows</h2>
+      <p class="section-lead">All flows are Active and agent-ready.</p>
+      <div class="card-grid">
+        <div class="card">
+          <h3>Create Appointment</h3>
+          <p><strong>Inputs:</strong> Contact Id, Date/Time, Service Type</p>
+          <p>Creates a record and returns the Appointment Id.</p>
+          <button class="shot-link" data-shot="1">View Flow &rarr;</button>
+        </div>
+        <div class="card">
+          <h3>Reschedule Appointment</h3>
+          <p><strong>Inputs:</strong> Appointment Id, New Date/Time</p>
+          <p>Updates the date and sets Status = Rescheduled.</p>
+          <button class="shot-link" data-shot="2">View Flow &rarr;</button>
+        </div>
+        <div class="card">
+          <h3>Cancel Appointment</h3>
+          <p><strong>Input:</strong> Appointment Id</p>
+          <p>Sets Status = Cancelled.</p>
+          <button class="shot-link" data-shot="3">View Flow &rarr;</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="booking">
+    <div class="container two-col">
+      <div>
+        <h2 class="section-title">Screen Flow — Booking Interface</h2>
+        <p>
+          <strong>"Book Appointment Screen"</strong> (Active) collects Date/Time and
+          Service Type from the user and creates the appointment record on
+          submission. It serves as a real, user-facing booking front-end and a
+          working alternative to the conversational AI agent.
+        </p>
+        <div class="btn-row">
+          <button class="shot-link btn btn-outline" data-shot="4">Builder View</button>
+          <button class="shot-link btn btn-outline" data-shot="5">Booking Screen</button>
+        </div>
+      </div>
+      <div class="thumb-pair">
+        <img src="Screenshots/05_Screen_Flow_Book_Appointment_Builder.png" alt="Screen Flow builder" data-shot="4" class="gallery-thumb">
+        <img src="Screenshots/06_Screen_Flow_Booking_Screen.png" alt="Booking screen" data-shot="5" class="gallery-thumb">
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt" id="app">
+    <div class="container two-col reverse">
+      <div>
+        <h2 class="section-title">Lightning App</h2>
+        <p>
+          <strong>"Appointment Management"</strong> Lightning App with tabs:
+          Appointments, Contacts, Reports, Dashboards. Includes a custom tab for
+          the Appointment object and is assigned to the System Administrator
+          profile.
+        </p>
+        <div class="btn-row">
+          <button class="shot-link btn btn-outline" data-shot="6">Appointments List</button>
+          <button class="shot-link btn btn-outline" data-shot="7">Record Detail</button>
+        </div>
+      </div>
+      <div class="thumb-pair">
+        <img src="Screenshots/07_Appointments_List_View.png" alt="Appointments list view" data-shot="6" class="gallery-thumb">
+        <img src="Screenshots/08_Appointment_Record_APT-00004.png" alt="Appointment record detail" data-shot="7" class="gallery-thumb">
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="reports">
+    <div class="container">
+      <h2 class="section-title">Reports &amp; Dashboard</h2>
+      <div class="card-grid">
+        <div class="card">
+          <h3>Report</h3>
+          <p>"Appointments by Status" (Custom Report Type "Appointments Report") — grouped by Status with a chart.</p>
+          <button class="shot-link" data-shot="8">View Report &rarr;</button>
+        </div>
+        <div class="card">
+          <h3>Dashboard</h3>
+          <p>"Appointments Dashboard" visualizing the data.</p>
+          <button class="shot-link" data-shot="10">View Dashboard &rarr;</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt" id="agentforce">
+    <div class="container">
+      <h2 class="section-title">Agentforce — Honest Status</h2>
+      <p class="section-lead">
+        Agentforce was part of the architecture from the start. Activation was
+        constrained by the Developer Edition org (missing tenant configuration
+        and licensing); "Agentforce Agents" returned "No matching items found"
+        in Setup. <strong>Mitigation:</strong> the Flows were built as agent-ready
+        actions and a fully working Screen Flow was delivered as an equivalent
+        booking interface. The integration path is documented and ready once
+        licensing is enabled.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" id="gallery">
+    <div class="container">
+      <h2 class="section-title">Screenshots</h2>
+      <p class="section-lead">Visual evidence — click any image to enlarge.</p>
+      <div class="gallery-grid" id="galleryGrid">
+        <!-- populated identically to thumb list below; JS builds captions -->
+        <img src="Screenshots/01_Data_Model_Appointment_Fields.png" alt="Data Model — Appointment Fields" data-shot="0" class="gallery-thumb">
+        <img src="Screenshots/02_Flow_Create_Appointment.png" alt="Flow — Create Appointment" data-shot="1" class="gallery-thumb">
+        <img src="Screenshots/03_Flow_Reschedule_Appointment.png" alt="Flow — Reschedule Appointment" data-shot="2" class="gallery-thumb">
+        <img src="Screenshots/04_Flow_Cancel_Appointment.png" alt="Flow — Cancel Appointment" data-shot="3" class="gallery-thumb">
+        <img src="Screenshots/05_Screen_Flow_Book_Appointment_Builder.png" alt="Screen Flow — Booking Builder" data-shot="4" class="gallery-thumb">
+        <img src="Screenshots/06_Screen_Flow_Booking_Screen.png" alt="Screen Flow — Booking Screen" data-shot="5" class="gallery-thumb">
+        <img src="Screenshots/07_Appointments_List_View.png" alt="Appointments List View" data-shot="6" class="gallery-thumb">
+        <img src="Screenshots/08_Appointment_Record_APT-00004.png" alt="Appointment Record APT-00004" data-shot="7" class="gallery-thumb">
+        <img src="Screenshots/09_Report_Appointments_by_Status.png" alt="Report — Appointments by Status" data-shot="8" class="gallery-thumb">
+        <img src="Screenshots/10_Dashboards_List.png" alt="Dashboards List" data-shot="9" class="gallery-thumb">
+        <img src="Screenshots/11_Appointments_Dashboard.png" alt="Appointments Dashboard" data-shot="10" class="gallery-thumb">
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt" id="docs">
+    <div class="container">
+      <h2 class="section-title">Documentation &amp; Presentation</h2>
+      <p class="section-lead">Full write-up and final capstone deck.</p>
+      <div class="doc-cards">
+        <a class="doc-card" href="Appointment_Management_Project_Documentation.docx" download>
+          <span class="doc-icon">📄</span>
+          <span class="doc-name">Project Documentation</span>
+          <span class="doc-sub">.docx — full report</span>
+        </a>
+        <a class="doc-card" href="Appointment_Assistant_Capstone.pptx" download>
+          <span class="doc-icon">📊</span>
+          <span class="doc-name">Capstone Presentation</span>
+          <span class="doc-sub">.pptx — final deck</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section skills">
+    <div class="container">
+      <h2 class="section-title">Skills Demonstrated</h2>
+      <div class="chip-row">
+        <span class="chip">Salesforce Data Modeling</span>
+        <span class="chip">Security &amp; Access</span>
+        <span class="chip">Flow Builder (Autolaunched &amp; Screen Flows)</span>
+        <span class="chip">Lightning App Builder</span>
+        <span class="chip">Custom Tabs</span>
+        <span class="chip">Reports &amp; Dashboards</span>
+        <span class="chip">Custom Report Types</span>
+        <span class="chip">AI-Ready Solution Design</span>
+        <span class="chip">Requirement Analysis</span>
+        <span class="chip">Testing &amp; Documentation</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <p>&copy; 2026 Muath Al-Mutairi — AI-Powered Appointment Management Assistant</p>
+    <a href="https://github.com/Muath477/salesforce-appointment-assistant" target="_blank" rel="noopener">GitHub Repository</a>
+  </div>
+</footer>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+  <button class="lightbox-prev" id="lightboxPrev" aria-label="Previous">&lsaquo;</button>
+  <img id="lightboxImg" src="" alt="">
+  <button class="lightbox-next" id="lightboxNext" aria-label="Next">&rsaquo;</button>
+  <p class="lightbox-caption" id="lightboxCaption"></p>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
