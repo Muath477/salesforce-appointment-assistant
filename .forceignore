@@ -1,0 +1,6 @@
+# Local Salesforce CLI state
+**/.sfdx
+**/.sf
+
+# macOS noise
+**/.DS_Store

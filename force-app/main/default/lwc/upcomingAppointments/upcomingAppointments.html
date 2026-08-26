@@ -1,0 +1,49 @@
+<template>
+    <lightning-card title="Upcoming Appointments" icon-name="standard:event">
+        <div class="slds-p-horizontal_medium">
+
+            <!-- Happy path: show the appointments in a simple data table -->
+            <template lwc:if={hasAppointments}>
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th scope="col"><div class="slds-truncate">Appointment</div></th>
+                            <th scope="col"><div class="slds-truncate">Customer</div></th>
+                            <th scope="col"><div class="slds-truncate">When</div></th>
+                            <th scope="col"><div class="slds-truncate">Service</div></th>
+                            <th scope="col"><div class="slds-truncate">Status</div></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={appointments} for:item="appt">
+                            <tr key={appt.id} class="slds-hint-parent">
+                                <td><div class="slds-truncate">{appt.name}</div></td>
+                                <td><div class="slds-truncate">{appt.customer}</div></td>
+                                <td>
+                                    <lightning-formatted-date-time
+                                        value={appt.when}
+                                        year="numeric" month="short" day="2-digit"
+                                        hour="2-digit" minute="2-digit">
+                                    </lightning-formatted-date-time>
+                                </td>
+                                <td><div class="slds-truncate">{appt.serviceType}</div></td>
+                                <td><div class="slds-truncate">{appt.status}</div></td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </template>
+
+            <!-- Empty state -->
+            <template lwc:if={isEmpty}>
+                <p class="slds-p-vertical_small">No upcoming appointments.</p>
+            </template>
+
+            <!-- Error state -->
+            <template lwc:if={errorMessage}>
+                <p class="slds-text-color_error slds-p-vertical_small">{errorMessage}</p>
+            </template>
+
+        </div>
+    </lightning-card>
+</template>

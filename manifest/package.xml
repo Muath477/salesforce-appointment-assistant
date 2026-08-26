@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>Appointment__c</members>
+        <name>CustomObject</name>
+    </types>
+    <types>
+        <members>Appointment__c.Contact__c</members>
+        <members>Appointment__c.Appointment_Date_Time__c</members>
+        <members>Appointment__c.Status__c</members>
+        <members>Appointment__c.Service_Type__c</members>
+        <members>Appointment__c.Notes__c</members>
+        <name>CustomField</name>
+    </types>
+    <types>
+        <members>AppointmentController</members>
+        <members>AppointmentControllerTest</members>
+        <members>ManageAppointmentAction</members>
+        <members>ManageAppointmentActionTest</members>
+        <name>ApexClass</name>
+    </types>
+    <types>
+        <members>upcomingAppointments</members>
+        <name>LightningComponentBundle</name>
+    </types>
+    <types>
+        <members>Appointment_Management_User</members>
+        <name>PermissionSet</name>
+    </types>
+    <version>61.0</version>
+</Package>
