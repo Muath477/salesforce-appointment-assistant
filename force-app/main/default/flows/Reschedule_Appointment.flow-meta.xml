@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <description>Autolaunched Flow that moves an existing appointment to a new date/time and sets its Status to Rescheduled. Invocation-ready for an Agentforce agent action.</description>
+    <environments>Default</environments>
+    <interviewLabel>Reschedule Appointment {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Reschedule Appointment</label>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_Appointment_Record</name>
+        <label>Update Appointment Record</label>
+        <locationX>176</locationX>
+        <locationY>287</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>varAppointmentId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Appointment_Date_Time__c</field>
+            <value>
+                <elementReference>varNewDateTime</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>Rescheduled</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Appointment__c</object>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Update_Appointment_Record</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>varAppointmentId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varNewDateTime</name>
+        <dataType>DateTime</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>
