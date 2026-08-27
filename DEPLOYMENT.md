@@ -1,16 +1,15 @@
 # Deployment Guide
 
-This guide covers deploying the Appointment Management Assistant source in this
-repository to a Salesforce org, and retrieving your existing org configuration
-(Flows, Lightning App, Reports) so the whole solution lives in version control.
+Everything the Appointment Management Assistant is made of now lives in this
+repository as Salesforce source. A grader, a teammate, or a future you can stand
+the whole solution up in a fresh org with one deploy command — no manual
+clicking to rebuild the object, the Flows, the app, or the reports.
 
 ## Prerequisites
 
 - [Salesforce CLI](https://developer.salesforce.com/tools/salesforcecli) (`sf`) installed
-- Access to your Salesforce org (Developer Edition or a sandbox)
+- A Salesforce org (Developer Edition, sandbox, or scratch org)
 - Git
-
-Check the CLI is installed:
 
 ```bash
 sf --version
@@ -24,69 +23,79 @@ sf org login web --alias appt-org --set-default
 
 A browser opens; log in and approve. `appt-org` is now your default org.
 
-## 2. Deploy the source in this repo
+## 2. Deploy
 
-This deploys the custom object, fields, Apex classes, the LWC, and the
-permission set.
+Validate first, then deploy for real:
 
 ```bash
-# Validate first without saving anything (a dry run)
-sf project deploy start --dry-run --manifest manifest/package.xml
+# Dry run — checks everything without saving a thing
+sf project deploy start --manifest manifest/package.xml --dry-run
 
-# Then deploy for real
+# Deploy
 sf project deploy start --manifest manifest/package.xml
 ```
 
-> **Already have the Appointment object in your org?**
-> If you built the object and fields manually earlier, deploying the versions in
-> `force-app/main/default/objects/` will simply update them to match (it does not
-> create duplicates, because metadata is keyed by API name). If your field API
-> names differ from the ones here, **retrieve your real object first** (see
-> step 4) and skip re-deploying the object.
+This deploys, in dependency order:
 
-## 3. Assign the permission set and run the tests
+| Metadata | What it is |
+|----------|------------|
+| `CustomObject` / `CustomField` / `ListView` | The Appointment object, its five fields, and two list views |
+| `ApexClass` | `AppointmentController`, `ManageAppointmentAction`, and three test classes |
+| `LightningComponentBundle` | The `upcomingAppointments` LWC |
+| `Flow` | Create / Reschedule / Cancel (autolaunched) and Book Appointment Screen |
+| `CustomApplication` / `CustomTab` / `FlexiPage` | The Appointment Management app, its object tab, and its home page |
+| `ReportType` / `Report` / `Dashboard` | Appointments Report type, Appointments by Status, Appointments Dashboard |
+| `PermissionSet` | Appointment Management User |
+
+## 3. Assign access and run the tests
 
 ```bash
-# Give your user access to the Appointment object and Apex classes
 sf org assign permset --name Appointment_Management_User
 
-# Run the Apex tests (deployment to production requires passing tests)
 sf apex run test --test-level RunLocalTests --result-format human --wait 10
 ```
 
-## 4. Retrieve your existing org configuration into the repo
+All three test classes should pass. `AppointmentSecurityTest` runs as a
+permission-set-only user and proves the least-privilege design holds: that user
+can book an appointment but cannot delete one.
 
-The Flows, Lightning App, Reports, and Dashboard you built in the org are not
-yet in Git. Pull them so the repository is a complete, deployable copy of the
-solution. Replace the example names with the exact API names from your org
-(Setup shows them).
+## 4. Two things the platform will not let metadata do for you
 
-```bash
-# Flows (Create / Reschedule / Cancel / Book Appointment Screen)
-sf project retrieve start --metadata Flow
+Both take about ten seconds each in Setup, and neither blocks the deploy.
 
-# The Lightning app, its tabs, and the custom Appointment record page
-sf project retrieve start --metadata CustomApplication CustomTab FlexiPage
+1. **Assign the home page.** Lightning page *assignments* are not part of
+   FlexiPage metadata. Open **Setup → Lightning App Builder → Appointment
+   Management Home → Activation** and set it as the app default for the
+   Appointment Management app. Until then the app opens on the standard home
+   page and the `upcomingAppointments` component is not on it — you can also
+   just drag the component on from App Builder.
+2. **Activate the Flows if your org deploys them inactive.** The Flow metadata
+   here is marked `Active`. If your org overrides that, open each Flow in
+   Setup → Flows and click Activate.
 
-# Reports and the dashboard
-sf project retrieve start --metadata Report ReportType Dashboard
-
-# Security you configured (profiles / permission sets / sharing)
-sf project retrieve start --metadata PermissionSet Profile
-```
-
-After retrieving, review the new files under `force-app/main/default/`, then
-commit them:
+## 5. Verify it works
 
 ```bash
-git add force-app
-git commit -m "Add retrieved Flows, Lightning App, and Reports metadata"
+sf org open
 ```
 
-## 5. Deploy everything to a fresh org (grading / demo)
+Switch to the **Appointment Management** app, then:
 
-Once the repo holds all the metadata, a grader can stand up the whole solution
-in one command against a new scratch org or sandbox:
+1. **Appointments tab → New** — create a record; it should get an `APT-#####`
+   number and default to Status = Scheduled.
+2. **Book Appointment Screen Flow** — run it, pick a future date and a service
+   type, and check the appointment number it hands back.
+3. Try a **past date** in the same Flow — it should send you back with a message
+   instead of creating the record.
+4. **Home page** — the Upcoming Appointments component lists what you just
+   booked, soonest first.
+5. **Reports → Appointments by Status** — the new record appears under Scheduled,
+   and the dashboard chart moves with it.
+
+## 6. Deploying from source instead of the manifest
+
+The manifest is the reliable path because it deploys in a known order. If you
+prefer, the whole source directory works too:
 
 ```bash
 sf project deploy start --source-dir force-app
@@ -94,13 +103,28 @@ sf project deploy start --source-dir force-app
 
 ## Troubleshooting
 
-- **"Missing field: Appointment_Date_Time__c"** — a Flow or the LWC references a
-  field API name that doesn't match your org. Retrieve your real object
-  (`sf project retrieve start --metadata CustomObject:Appointment__c`) and align
-  the names.
-- **Apex test failures block deployment** — deployments to production run tests.
-  Deploy to a sandbox or scratch org first, confirm tests pass, then use a
-  change set or `sf project deploy start` to production.
-- **LWC not visible in App Builder** — confirm `isExposed` is `true` in
-  `upcomingAppointments.js-meta.xml` (it is, by default here) and that your user
-  has the permission set assigned.
+- **`You can't specify field permissions for required fields`** — this is exactly
+  why `Appointment_Date_Time__c` and `Status__c` are deliberately absent from the
+  permission set's `fieldPermissions`. Adding them back breaks the deploy; the
+  platform grants read/edit on required fields implicitly.
+- **`no Report named ... found`** — the `ReportType` must exist before the
+  `Report`. The manifest already orders them correctly; this only bites when
+  deploying a partial subset.
+- **FlexiPage fails to deploy** — the home page depends on the
+  `upcomingAppointments` LWC existing first. Deploy the full manifest rather than
+  the FlexiPage on its own.
+- **Apex test failures block a production deploy** — deploy to a sandbox or
+  scratch org first, confirm the tests pass there, then promote.
+- **LWC not visible in App Builder** — confirm your user has the
+  `Appointment_Management_User` permission set assigned.
+
+## Retrieving org changes back into Git
+
+If you change something in the org through Setup, pull it back so the repository
+stays the source of truth:
+
+```bash
+sf project retrieve start --manifest manifest/package.xml
+git add force-app
+git commit -m "Retrieve org changes"
+```
