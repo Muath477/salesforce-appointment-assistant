@@ -14,8 +14,20 @@ Run with `sf apex run test --test-level RunLocalTests`.
 | `AppointmentControllerTest.returnsOnlyUpcomingNonCancelled` | The LWC controller returns only future, non-cancelled appointments, in date order | Pass |
 | `AppointmentControllerTest.nullLimitFallsBackToDefault` | A null row limit does not throw | Pass |
 | `ManageAppointmentActionTest.createsAnAppointment` | Create action inserts a Scheduled appointment | Pass |
+| `ManageAppointmentActionTest.createDefaultsServiceTypeWhenOmitted` | A missing service type falls back to Consultation | Pass |
 | `ManageAppointmentActionTest.reschedulesAndCancels` | Reschedule sets status Rescheduled; cancel sets Cancelled | Pass |
+| `ManageAppointmentActionTest.listReturnsUpcomingAppointmentsForContact` | The lookup action returns only upcoming, non-cancelled appointments for that customer | Pass |
+| `ManageAppointmentActionTest.listWithNoAppointmentsIsHandled` | A customer with nothing booked gets a clean message | Pass |
+| `ManageAppointmentActionTest.pastDateIsRejected` | A date in the past is refused before any record is written | Pass |
+| `ManageAppointmentActionTest.missingInputsReturnFriendlyMessages` | Four incomplete requests return four ordered results — bulkification holds | Pass |
 | `ManageAppointmentActionTest.unknownActionReturnsMessage` | An unknown action returns a clean error, not an exception | Pass |
+| `ManageAppointmentActionTest.nullActionIsHandled` | A null action does not throw | Pass |
+| `AppointmentSecurityTest.permissionSetGrantsCreateButNotDelete` | The permission set grants create/read/edit on Appointment and never delete | Pass |
+| `AppointmentSecurityTest.permissionSetUserCanBookAnAppointment` | A user holding only this permission set can book through the invocable action | Pass |
+| `AppointmentSecurityTest.blockedUserGetsHandledResultNotAnException` | A user without access gets a structured result and a readable message, not an unhandled exception | Pass |
+
+`AppointmentSecurityTest` is the automated counterpart to UAT case **U5** below,
+which was originally verified by hand only.
 
 ## 2. Flow / automation tests (manual)
 
@@ -34,7 +46,9 @@ Run with `sf apex run test --test-level RunLocalTests`.
 | U2 | Upcoming Appointments LWC | Open the Home/App page hosting the component | Next appointments listed, soonest first, cancelled ones hidden | Pass |
 | U3 | LWC empty state | View with no upcoming appointments | "No upcoming appointments." message | Pass |
 | U4 | Reports & dashboard | Open Appointments by Status report and dashboard | Counts grouped by status match the records | Pass |
-| U5 | Field-level security | Log in as a user with only the permission set | Can create/read/edit appointments; cannot delete | Pass |
+| U5 | Field-level security | Log in as a user with only the permission set | Can create/read/edit appointments; cannot delete | Pass (also automated — see §1) |
+| U6 | Past-date guard | In the Screen Flow, pick a date/time that has already passed | Flow shows a "choose a future date" screen and creates no record | Pass |
+| U7 | Booking confirmation | Complete the Screen Flow | Confirmation screen shows the `APT-#####` reference, service, and date | Pass |
 
 ## 4. Conversational agent tests (Agentforce)
 
