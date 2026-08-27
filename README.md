@@ -62,7 +62,7 @@ Custom object **Appointment** (`Appointment__c`, Record Name = Auto Number `APT-
 | Appointment Date/Time (`Appointment_Date_Time__c`) | Date/Time — required |
 | Status (`Status__c`) | Picklist (restricted) — Scheduled · Rescheduled · Completed · Cancelled |
 | Service Type (`Service_Type__c`) | Picklist (restricted) — Consultation · Follow-up · Support · Other |
-| Notes (`Notes__`) | Long Text Area |
+| Notes (`Notes__c`) | Long Text Area |
 
 Cancelling sets `Status__c = 'Cancelled'` rather than deleting the record, so
 cancellations stay visible in reporting and the object never needs delete
@@ -192,7 +192,7 @@ sf apex run test --test-level RunLocalTests --result-format human --wait 10
 ## Requirements coverage
 
 | Requirement / skill | Where it lives |
-|---------------------|---------------|
+|---------------------|----------------|
 | Secure, scalable data model | `objects/Appointment__c/` |
 | Security & Access Management | `permissionsets/`, `USER_MODE` in Apex, `AppointmentSecurityTest` |
 | Data Management | list views, restricted picklists, required fields, auto-number key |
