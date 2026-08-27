@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ReportType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <baseObject>Appointment__c</baseObject>
+    <category>other</category>
+    <deployed>true</deployed>
+    <description>Custom report type on the Appointment object. A custom object cannot be reported on until a report type exists for it, so this is a prerequisite for the Appointments by Status report and the dashboard.</description>
+    <label>Appointments Report</label>
+    <sections>
+        <columns>
+            <checkedByDefault>true</checkedByDefault>
+            <field>NAME</field>
+            <table>Appointment__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>true</checkedByDefault>
+            <field>Contact__c</field>
+            <table>Appointment__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>true</checkedByDefault>
+            <field>Appointment_Date_Time__c</field>
+            <table>Appointment__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>true</checkedByDefault>
+            <field>Status__c</field>
+            <table>Appointment__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>true</checkedByDefault>
+            <field>Service_Type__c</field>
+            <table>Appointment__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Notes__c</field>
+            <table>Appointment__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>CREATED_DATE</field>
+            <table>Appointment__c</table>
+        </columns>
+        <masterLabel>Appointments</masterLabel>
+    </sections>
+</ReportType>
