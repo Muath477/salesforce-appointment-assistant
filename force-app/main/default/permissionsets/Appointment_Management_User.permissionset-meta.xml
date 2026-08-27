@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
     <label>Appointment Management User</label>
-    <description>Grants access to the Appointment object and its fields for agents and administrators using the Appointment Management Assistant.</description>
+    <description>Grants access to the Appointment object, its fields, the Appointment Management app, and the Apex classes behind the assistant. Least privilege: create/read/edit but no delete.</description>
     <hasActivationRequired>false</hasActivationRequired>
+    <applicationVisibilities>
+        <application>Appointment_Management</application>
+        <visible>true</visible>
+    </applicationVisibilities>
+    <tabSettings>
+        <tab>Appointment__c</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
     <objectPermissions>
         <object>Appointment__c</object>
         <allowCreate>true</allowCreate>
@@ -12,18 +20,15 @@
         <viewAllRecords>false</viewAllRecords>
         <modifyAllRecords>false</modifyAllRecords>
     </objectPermissions>
+    <!--
+        Appointment_Date_Time__c and Status__c are universally required fields.
+        Salesforce does not allow field-level security to be declared for a
+        required field - the platform grants read/edit implicitly, and a
+        deployment that lists one under fieldPermissions is rejected. They are
+        therefore intentionally omitted from this permission set.
+    -->
     <fieldPermissions>
         <field>Appointment__c.Contact__c</field>
-        <readable>true</readable>
-        <editable>true</editable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <field>Appointment__c.Appointment_Date_Time__c</field>
-        <readable>true</readable>
-        <editable>true</editable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <field>Appointment__c.Status__c</field>
         <readable>true</readable>
         <editable>true</editable>
     </fieldPermissions>
