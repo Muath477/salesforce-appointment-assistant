@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Upcoming_Appointments</fullName>
+    <columns>NAME</columns>
+    <columns>Contact__c</columns>
+    <columns>Appointment_Date_Time__c</columns>
+    <columns>Service_Type__c</columns>
+    <columns>Status__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Status__c</field>
+        <operation>notEqual</operation>
+        <value>Cancelled</value>
+    </filters>
+    <label>Upcoming Appointments</label>
+</ListView>
