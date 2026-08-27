@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customObject>true</customObject>
+    <description>Tab for the Appointment custom object, used by the Appointment Management Lightning app.</description>
+    <motif>Custom20: Calendar</motif>
+</CustomTab>
