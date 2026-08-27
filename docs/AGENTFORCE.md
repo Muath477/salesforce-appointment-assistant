@@ -60,21 +60,35 @@ topic has scope instructions and a set of allowed actions.
 
 ## 3. Agent actions
 
-The agent performs work by calling Salesforce actions. All three map to the
+The agent performs work by calling Salesforce actions. All four map to the
 single invocable Apex action in this repo, `ManageAppointmentAction`
 (`force-app/main/default/classes/ManageAppointmentAction.cls`), or to the
-equivalent autolaunched Flows. Using one invocable method keeps the logic in one
-place and bulkifiable.
+equivalent autolaunched Flows in `force-app/main/default/flows/`. Using one
+invocable method keeps the logic in one place and bulkifiable.
 
 | Agent action | Backing implementation | Inputs | Output |
 |--------------|------------------------|--------|--------|
-| Create Appointment | `ManageAppointmentAction` (action = `create`) or `Create Appointment` Flow | Contact Id, Date/Time, Service Type | Success flag, message, Appointment Id |
-| Reschedule Appointment | `ManageAppointmentAction` (action = `reschedule`) or `Reschedule Appointment` Flow | Appointment Id, new Date/Time | Success flag, message |
-| Cancel Appointment | `ManageAppointmentAction` (action = `cancel`) or `Cancel Appointment` Flow | Appointment Id | Success flag, message |
+| Find My Appointments | `ManageAppointmentAction` (action = `list`) | Contact Id | Success flag, readable list of upcoming appointments, Id of the soonest |
+| Create Appointment | `ManageAppointmentAction` (action = `create`) or `Create_Appointment` Flow | Contact Id, Date/Time, Service Type | Success flag, message, Appointment Id |
+| Reschedule Appointment | `ManageAppointmentAction` (action = `reschedule`) or `Reschedule_Appointment` Flow | Appointment Id, new Date/Time | Success flag, message |
+| Cancel Appointment | `ManageAppointmentAction` (action = `cancel`) or `Cancel_Appointment` Flow | Appointment Id | Success flag, message |
+
+**Find My Appointments** is what lets the Reschedule and Cancel topics work at
+all. A customer says "move my appointment" without knowing an Id; the agent calls
+this action first, reads the real records back, and only then has something
+concrete to act on. It is also the grounding mechanism — the agent speaks from
+returned record data instead of inventing an appointment.
 
 Because `ManageAppointmentAction` is an `@InvocableMethod`, it appears directly
 in the Agentforce action library and in Flow — no extra wrapper is needed. This
 is the **Agentforce + Flow integration** point.
+
+**Security note.** Every query and DML in the action runs in
+`AccessLevel.USER_MODE`, so an agent session can never read or write more than
+the user it runs as is entitled to, and a blocked request comes back as a handled
+message rather than an exception that would break the conversation. This is the
+Trust Layer's record-access guarantee enforced in code as well as in
+configuration.
 
 ## 4. Prompt engineering notes
 
