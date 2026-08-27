@@ -9,16 +9,17 @@ public with sharing class AppointmentController {
         // sensible default instead of letting the SOQL LIMIT blow up.
         Integer rowLimit = (maxRows == null || maxRows <= 0) ? 5 : maxRows;
 
-        // WITH SECURITY_ENFORCED makes the query respect the running user's
-        // field- and object-level security. If they can't see a field, the
-        // query fails loudly rather than leaking data.
+        // WITH USER_MODE makes the query respect the running user's object- and
+        // field-level security *and* sharing rules. If they can't see a field
+        // the query fails loudly rather than leaking data. It supersedes the
+        // older WITH SECURITY_ENFORCED clause.
         return [
             SELECT Id, Name, Appointment_Date_Time__c, Status__c,
                    Service_Type__c, Contact__r.Name
             FROM Appointment__c
             WHERE Appointment_Date_Time__c >= :System.now()
               AND Status__c != 'Cancelled'
-            WITH SECURITY_ENFORCED
+            WITH USER_MODE
             ORDER BY Appointment_Date_Time__c ASC
             LIMIT :rowLimit
         ];
