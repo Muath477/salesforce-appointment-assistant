@@ -103,7 +103,8 @@ appointment, and confirms the `APT-#####` reference back to the user. Launched
 standalone or from a Contact record page, where it links the appointment to that
 customer automatically. A real, user-facing booking front-end and a working
 alternative to the conversational agent.
-_See `Screenshots/05–06`._
+_See `Screenshots/05–06`, and a live end-to-end run (empty form → filled form →
+confirmed, record created) in `Demo_Recordings/17–19`._
 
 ---
 
@@ -187,7 +188,9 @@ still deliver a working conversational assistant on the same automation, an
 Everything specified in `docs/AGENTFORCE.md` is ready to rebuild as native
 Agentforce topics/actions as-is on any org where Agentforce licensing is
 enabled — the Einstein Bot is the conversational substitute that runs today.
-_See `Screenshots/12–16`._
+_See `Screenshots/12–16`, and the bot's live greeting screen in
+`Demo_Recordings/20` (`docs/AGENTFORCE.md` §7.2 explains why a full multi-turn
+capture isn't possible from Bot Builder's Text Preview)._
 
 `Agentforce_Integration_Report.pdf` documents the licensing investigation
 itself (the activation attempts, the "Purchase Required" blocker, and the
