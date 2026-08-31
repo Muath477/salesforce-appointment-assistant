@@ -187,7 +187,13 @@ still deliver a working conversational assistant on the same automation, an
 Everything specified in `docs/AGENTFORCE.md` is ready to rebuild as native
 Agentforce topics/actions as-is on any org where Agentforce licensing is
 enabled — the Einstein Bot is the conversational substitute that runs today.
-Full detail in `Agentforce_Integration_Report.pdf` and `docs/AGENTFORCE.md` §7.
+
+`Agentforce_Integration_Report.pdf` documents the licensing investigation
+itself (the activation attempts, the "Purchase Required" blocker, and the
+Screen Flow mitigation) and predates the Einstein Bot, so it does not mention
+it — that part of the story is in `docs/AGENTFORCE.md` §7 instead. Read the
+two together: the PDF for *why* native Agentforce couldn't be activated, this
+document and `docs/AGENTFORCE.md` for *what was built in its place*.
 
 ---
 

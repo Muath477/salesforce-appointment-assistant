@@ -174,15 +174,24 @@
 
   <section class="section alt" id="agentforce">
     <div class="container">
-      <h2 class="section-title">Agentforce — Honest Status</h2>
+      <h2 class="section-title">Agentforce &amp; Conversational AI — Honest Status</h2>
       <p class="section-lead">
         Agentforce was part of the architecture from the start. Activation was
         constrained by the Developer Edition org (missing tenant configuration
         and licensing); "Agentforce Agents" returned "No matching items found"
         in Setup. <strong>Mitigation:</strong> the Flows were built as agent-ready
-        actions and a fully working Screen Flow was delivered as an equivalent
-        booking interface. The integration path is documented and ready once
-        licensing is enabled.
+        actions, a fully working Screen Flow was delivered as a non-conversational
+        booking interface, <strong>and a real, Active Einstein Bot named
+        "Appointment Assistant" was built as the working conversational
+        substitute.</strong> Its three dialogs — Schedule, Reschedule, and
+        Cancel an appointment — look up the customer's real Contact and
+        Appointment records and call the exact same
+        <code>Create_Appointment</code> / <code>Reschedule_Appointment</code> /
+        <code>Cancel_Appointment</code> Flows used everywhere else in this repo,
+        so nothing about the automation is duplicated or faked. Everything
+        specified in <a href="docs/AGENTFORCE.md">docs/AGENTFORCE.md</a> is
+        ready to rebuild as native Agentforce topics and actions, unchanged,
+        the moment licensing is enabled — see §7 there for the full detail.
       </p>
     </div>
   </section>
