@@ -46,7 +46,7 @@ salesforce-appointment-assistant/
 ├── Appointment_Management_Project_Documentation.docx
 ├── Appointment_Assistant_Capstone.pptx
 ├── Agentforce_Integration_Report.pdf
-└── Screenshots/                      ← visual evidence from the org (11 images)
+└── Screenshots/                      ← visual evidence from the org (16 images)
 ```
 
 ---
@@ -187,6 +187,7 @@ still deliver a working conversational assistant on the same automation, an
 Everything specified in `docs/AGENTFORCE.md` is ready to rebuild as native
 Agentforce topics/actions as-is on any org where Agentforce licensing is
 enabled — the Einstein Bot is the conversational substitute that runs today.
+_See `Screenshots/12–16`._
 
 `Agentforce_Integration_Report.pdf` documents the licensing investigation
 itself (the activation attempts, the "Purchase Required" blocker, and the
