@@ -170,6 +170,21 @@ exercised either through a real channel (e.g., an Experience Cloud embedded
 chat, if one is stood up) or by walking Text Preview's choice buttons instead
 of free-typing the email.
 
+**Update (demo-recording session):** attempting to capture a full multi-turn
+Text Preview conversation for the demo video surfaced a deeper instance of the
+same limitation — selecting **Reschedule an appointment** or **Cancel an
+appointment** from the Main Menu (via the numbered choice buttons, not
+free-typed text) reproducibly threw "Unfortunately, a system error occurred"
+immediately, before any question was even shown, on every attempt. Only the
+initial bot greeting and its 3-option Main Menu render correctly in Text
+Preview — see `Demo_Recordings/20_Bot_Preview_Greeting_Menu.png`. This is
+consistent with the banner Text Preview itself shows ("Some messaging
+components aren't supported in text preview") and confirms this is a preview-
+surface rendering gap, not a defect in the dialogs themselves — the same
+Reschedule and Cancel dialogs are exercised end-to-end and pass in
+`docs/TEST_PLAN.md` §4.2, which used the full Bot Builder canvas/debug context
+rather than the constrained Text Preview widget.
+
 ### 7.3 Status summary
 
 Everything in §1–§6 above is ready to rebuild as native Agentforce topics and
