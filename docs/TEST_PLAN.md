@@ -50,22 +50,50 @@ which was originally verified by hand only.
 | U6 | Past-date guard | In the Screen Flow, pick a date/time that has already passed | Flow shows a "choose a future date" screen and creates no record | Pass |
 | U7 | Booking confirmation | Complete the Screen Flow | Confirmation screen shows the `APT-#####` reference, service, and date | Pass |
 
-## 4. Conversational agent tests (Agentforce)
+## 4. Conversational agent tests
 
-To be executed on an Agentforce-enabled org. Expected behaviour per
-`docs/AGENTFORCE.md`.
+Two rows here: native Agentforce (still gated by licensing on this Developer
+Edition org — see `docs/AGENTFORCE.md` §7) and the Einstein Bot that was built
+as its tested, working substitute. The bot dialogs call the exact same
+`Create_Appointment` / `Reschedule_Appointment` / `Cancel_Appointment` Flows an
+activated Agentforce agent would call, so §4.2 is real evidence that the
+underlying design in §3 of `docs/AGENTFORCE.md` behaves as specified.
+
+### 4.1 Native Agentforce agent (pending license)
+
+Expected behaviour per `docs/AGENTFORCE.md` §1–§5, to be re-verified as-is once
+Agentforce is licensed on the org (activation steps in `docs/AGENTFORCE.md`
+§7.3 / §6 of the Integration Report).
 
 | # | Scenario | Example input | Expected agent behaviour | Status |
 |---|----------|---------------|--------------------------|--------|
-| A1 | Happy-path booking | "Book a consultation next Tuesday at 2pm" | Confirms details, calls Create action, reads back confirmation | Pending (agent not activated on DE org) |
+| A1 | Happy-path booking | "Book a consultation next Tuesday at 2pm" | Confirms details, calls Create action, reads back confirmation | Pending (Agentforce not licensed on this DE org) |
 | A2 | Missing slot | "Book an appointment" | Asks for service type and date/time before acting | Pending |
 | A3 | Ambiguous date | "Move it to next week" | Asks for a specific day/time before rescheduling | Pending |
 | A4 | Cancel confirmation | "Cancel my appointment" | Confirms intent, then calls Cancel action | Pending |
 | A5 | Out of scope | "What's the weather?" | Politely declines / hands off to human | Pending |
 
+### 4.2 Einstein Bot substitute — "Appointment Assistant" (tested)
+
+Executed in Bot Builder's Preview against the live **Active** bot documented in
+`docs/AGENTFORCE.md` §7.1. Per the §7.2 Text Preview limitation, email lookup
+was driven with the preview's choice buttons rather than free-typed text; this
+is a preview-surface limitation, not a dialog defect.
+
+| # | Scenario | Dialog exercised | Expected result | Status |
+|---|----------|-------------------|------------------|--------|
+| E1 | Schedule dialog reaches the Flow | "Schedule an appointment" | Email lookup finds the Contact, confirms identity, collects date/time and service type, runs `Create_Appointment` | Pass |
+| E2 | Reschedule dialog lists real appointments | "Reschedule an appointment" | Object Search returns the customer's real Appointment records as dynamic choices before rescheduling | Pass |
+| E3 | Reschedule dialog reaches the Flow | Continue E2, pick an appointment, give a new date/time | Runs `Reschedule_Appointment`, bot confirms the change | Pass |
+| E4 | Cancel dialog lists real appointments | "Cancel an appointment" | Object Search returns the customer's real Appointment records as dynamic choices before cancelling | Pass |
+| E5 | Cancel dialog reaches the Flow and confirms | Continue E4, pick an appointment | Runs `Cancel_Appointment`, bot replies "Your appointment has been cancelled!" | Pass |
+
 ## 5. Summary
 
-All automation, Apex, and UI test cases passed on the capstone org. The
-conversational test cases (section 4) are specified and ready to run once
-Agentforce is enabled; the same backing actions they depend on are already built
-and tested (sections 1–2).
+All automation, Apex, and UI test cases passed on the capstone org (sections
+1–3). The Einstein Bot conversational substitute was exercised end-to-end in
+Bot Builder Preview and passed (§4.2), proving out the same
+Create/Reschedule/Cancel Flow integration a licensed Agentforce agent would use.
+The native Agentforce test cases (§4.1) are specified and ready to run the
+moment Agentforce licensing is enabled — no change to the backing Flows or Apex
+is required.
