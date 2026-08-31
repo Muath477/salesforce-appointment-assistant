@@ -161,18 +161,33 @@ sf org assign permset --name Appointment_Management_User
 
 ---
 
-## Agentforce
+## Agentforce & Conversational AI
 
-The conversational agent — topics (Schedule / Reschedule / Cancel), instructions,
-actions, prompt-engineering notes, and Einstein Trust Layer settings — is fully
-specified in **[docs/AGENTFORCE.md](docs/AGENTFORCE.md)**. Its actions map to the
-built-and-tested `ManageAppointmentAction` and the Flows above.
+The conversational agent design — topics (Schedule / Reschedule / Cancel),
+instructions, actions, prompt-engineering notes, and Einstein Trust Layer
+settings — is fully specified in **[docs/AGENTFORCE.md](docs/AGENTFORCE.md)**.
+Its actions map to the built-and-tested `ManageAppointmentAction` and the Flows
+above.
 
-**Honest status:** activation was constrained by the Developer Edition org
-(missing Agentforce licensing/tenant configuration), so the conversational layer
-could not be turned on there. The Screen Flow was delivered as an equivalent
-working booking interface, and the agent is ready to build as-is on any
-Agentforce-enabled org. Full detail in `Agentforce_Integration_Report.pdf`.
+**Honest status:** true Agentforce (GenAI agent) activation was constrained by
+the Developer Edition org (missing Agentforce licensing/tenant configuration —
+"Agentforce Agents" returns "No matching items found" in Setup on this org). To
+still deliver a working conversational assistant on the same automation, an
+**Einstein Bot named "Appointment Assistant" was built and is Active**:
+
+- Three dialogs — **Schedule an appointment**, **Reschedule an appointment**,
+  **Cancel an appointment** — each collects the customer's email, looks up their
+  Contact and appointments, and calls the same `Create_Appointment` /
+  `Reschedule_Appointment` / `Cancel_Appointment` Flows used everywhere else in
+  this repo (one automation layer, two front ends — no duplicated logic).
+- The bot is saved, activated, and testable from Bot Builder's Preview.
+- The Screen Flow (`Book_Appointment_Screen`) remains the working, non-
+  conversational booking interface described below.
+
+Everything specified in `docs/AGENTFORCE.md` is ready to rebuild as native
+Agentforce topics/actions as-is on any org where Agentforce licensing is
+enabled — the Einstein Bot is the conversational substitute that runs today.
+Full detail in `Agentforce_Integration_Report.pdf` and `docs/AGENTFORCE.md` §7.
 
 ---
 
@@ -218,6 +233,28 @@ and in the **Demo Video Link** field on the submission page:_
 
 **Demo video:** `<add link here>`
 
-Suggested three-minute run of show: book an appointment through the Screen Flow →
-show it appear in the Upcoming Appointments component → reschedule it → cancel it
-→ show the dashboard move.
+Suggested ~4-minute run of show (record your screen, e.g. with the browser's
+built-in screen recorder or QuickTime/OBS, at 1280×800 or larger so Setup text
+stays legible):
+
+1. **Data model (20s):** Object Manager → `Appointment__c` → show the fields
+   from the table above.
+2. **Screen Flow booking (45s):** Open `Book_Appointment_Screen`, book an
+   appointment, show the `APT-#####` confirmation.
+3. **Upcoming Appointments LWC (15s):** Show the new appointment appear on the
+   Home page component.
+4. **Einstein Bot — the conversational layer (90s):** Setup → Einstein Bots →
+   **Appointment Assistant** (Active) → Bot Builder → open **Cancel an
+   appointment** (or Reschedule) and narrate the dialog canvas: email lookup →
+   Object Search → dynamic appointment choice → **Run Flow action** node →
+   confirmation message. Then click **Preview** and walk it with the choice
+   buttons (not free-typed email, per the §7.2 Text Preview limitation in
+   `docs/AGENTFORCE.md`) to show it actually finding a real Contact and
+   Appointment.
+5. **Reschedule / Cancel via Flow (30s):** Reuse or reschedule/cancel the same
+   record through the Screen Flow or a direct action, so the status change is
+   visible.
+6. **Reports & Dashboard (30s):** Open the Appointments Dashboard, show the
+   status breakdown update.
+7. **Close (10s):** One sentence on the Agentforce vs. Einstein Bot honest
+   status (§7 of `docs/AGENTFORCE.md`).
