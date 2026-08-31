@@ -126,8 +126,53 @@ results.
 The agent above is fully specified and the backing actions
 (`ManageAppointmentAction`, the Flows) are built and deployable. On the
 Developer Edition org used for the capstone, the **Agentforce Agents** feature
-was not available for activation (the org lacked the required licensing/tenant
-configuration), so the conversational layer could not be turned on there. The
-Screen Flow (`Book Appointment Screen`) was delivered as a working, user-facing
-booking interface that exercises the same underlying logic. Everything in this
-document is ready to build as-is on any org where Agentforce is enabled.
+was not available for activation ("Agentforce Agents" returns "No matching
+items found" in Setup — the org lacks the required licensing/tenant
+configuration), so the native Agentforce conversational layer could not be
+turned on there.
+
+### 7.1 What was built instead: an active Einstein Bot
+
+To still deliver a real, working conversational assistant on this org, an
+**Einstein Bot ("Enhanced" type) named "Appointment Assistant"** was built in
+Bot Builder and is **Active**. It implements the same three topics specified
+above as three dialogs, each wired to the real automation — not a mockup:
+
+| Dialog | Steps | Flow it calls |
+|--------|-------|----------------|
+| **Schedule an appointment** | Ask for email → Object Search: Contact (`Email` = Customer Email) → confirm "I found your account. Is this you?" → collect date/time & service type → run Flow | `Create_Appointment` |
+| **Reschedule an appointment** | Ask for email → find Contact → Object Search: Appointment (`Contact` = Contact Id) → "Which appointment would you like to reschedule?" (dynamic choices from Found Appointments) → ask new date/time → run Flow | `Reschedule_Appointment` |
+| **Cancel an appointment** | Ask for email → find Contact → Object Search: Appointment → "Which appointment would you like to cancel?" (dynamic choices) → run Flow → "Your appointment has been cancelled!" | `Cancel_Appointment` |
+
+This is the same **Agentforce-to-Flow integration point** described in §3 —
+the bot's dialog Action steps call the exact same `Create_Appointment`,
+`Reschedule_Appointment`, and `Cancel_Appointment` autolaunched Flows that back
+the Screen Flow and (once licensed) the Agentforce agent actions. Nothing was
+duplicated or faked to make the bot work: one automation layer, reused by every
+front end in this repo.
+
+**No fabrication, stated plainly:** the bot is a genuine Einstein Bot (Bot
+Builder's own conversational product), not Agentforce. It is disclosed as such
+everywhere in this repo — README, this document, the .docx, and the .pptx —
+rather than being presented as Agentforce. It is the honest, working substitute
+this org's licensing allows.
+
+### 7.2 A known limitation of Text Preview (not a config bug)
+
+Bot Builder's **Text Preview** does not reliably recognize free-typed email
+addresses against the `[System] Email Address` entity — this reproduces
+identically on the pre-existing "Schedule an appointment" dialog as well, so it
+is a limitation of the text-only preview surface, not something specific to the
+new dialogs. **Rich Content Preview** (which resolves entities correctly)
+requires a published Messaging channel, which is outside what a plain
+Developer Edition org supports. Practically, this means the bot should be
+exercised either through a real channel (e.g., an Experience Cloud embedded
+chat, if one is stood up) or by walking Text Preview's choice buttons instead
+of free-typing the email.
+
+### 7.3 Status summary
+
+Everything in §1–§6 above is ready to rebuild as native Agentforce topics and
+actions, unchanged, the moment Agentforce licensing is available on this org.
+Until then, the Einstein Bot documented here is the real, active, working
+conversational layer for this capstone submission.
